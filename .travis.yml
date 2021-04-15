@@ -10,7 +10,7 @@ matrix:
     include:
         # glibc (gcc/clang)
         - os: linux
-          env: DISTRO=opensuse/tumbleweed TSS=ibmtss CONTAINER=podman CONTAINER_ARGS="--network=host"
+          env: DISTRO=opensuse/tumbleweed TSS=ibmtss CONTAINER=podman CONTAINER_ARGS="--runtime=/usr/bin/runc --network=host"
           compiler: clang
 
         - os: linux
@@ -42,7 +42,7 @@ before_install:
     - DIR="/usr/src/ima-evm-utils"
     - printf "FROM $DISTRO\nRUN mkdir -p $DIR\nWORKDIR $DIR\nCOPY . $DIR\n" > Dockerfile
     - cat Dockerfile
-    - $CONTAINER build $CONTAINER_ARGS -t ima-evm-utils .
+    - sudo $CONTAINER build $CONTAINER_ARGS -t ima-evm-utils .
 
 script:
     - INSTALL="${DISTRO%%:*}"
