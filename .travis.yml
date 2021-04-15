@@ -8,65 +8,14 @@ services:
 
 matrix:
     include:
-        # 32 bit build
-        - os: linux
-          env: DISTRO=debian:stable VARIANT=i386 ARCH=i386 TSS=tpm2-tss
-          compiler: gcc
-
-        # cross compilation builds
-        - os: linux
-          env: DISTRO=debian:stable VARIANT=cross-compile ARCH=ppc64el TSS=ibmtss
-          compiler: powerpc64le-linux-gnu-gcc
-
-        - os: linux
-          env: DISTRO=debian:stable VARIANT=cross-compile ARCH=arm64 TSS=tpm2-tss
-          compiler: aarch64-linux-gnu-gcc
-
-        - os: linux
-          env: DISTRO=debian:stable VARIANT=cross-compile ARCH=s390x TSS=ibmtss
-          compiler: s390x-linux-gnu-gcc
-
-        # musl
-        - os: linux
-          env: DISTRO=alpine:latest TSS=tpm2-tss
-          compiler: gcc
-
         # glibc (gcc/clang)
         - os: linux
           env: DISTRO=opensuse/tumbleweed TSS=ibmtss CONTAINER=podman CONTAINER_ARGS="--runtime=/usr/bin/runc --network=host"
           compiler: clang
 
         - os: linux
-          env: DISTRO=opensuse/leap TSS=tpm2-tss
-          compiler: gcc
-
-        - os: linux
-          env: DISTRO=ubuntu:groovy TSS=ibmtss
-          compiler: gcc
-
-        - os: linux
-          env: DISTRO=ubuntu:xenial TSS=tpm2-tss
-          compiler: clang
-
-        - os: linux
           env: DISTRO=fedora:latest TSS=ibmtss
           compiler: clang
-
-        - os: linux
-          env: DISTRO=centos:7 TSS=tpm2-tss
-          compiler: gcc
-
-        - os: linux
-          env: DISTRO=centos:latest TSS=tpm2-tss
-          compiler: clang
-
-        - os: linux
-          env: DISTRO=debian:testing TSS=tpm2-tss
-          compiler: clang
-
-        - os: linux
-          env: DISTRO=debian:stable TSS=ibmtss
-          compiler: gcc
 
 before_install:
     # Tumbleweed requires podman and newest runc due docker incompatible with glibc 2.33 (faccessat2)
@@ -83,6 +32,10 @@ before_install:
             # runc
             sudo curl -L https://github.com/opencontainers/runc/releases/download/v1.0.0-rc93/runc.amd64 -o /usr/bin/runc
             sudo chmod +x /usr/bin/runc
+
+            echo "=== START /etc/containers/registries.conf ==="
+            cat /etc/containers/registries.conf
+            echo "=== END /etc/containers/registries.conf ==="
         fi
     - $CONTAINER info
 
