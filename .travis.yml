@@ -84,6 +84,17 @@ before_install:
             sudo curl -L https://github.com/opencontainers/runc/releases/download/v1.0.0-rc93/runc.amd64 -o /usr/bin/runc
             sudo chmod +x /usr/bin/runc
         fi
+
+    # Docker Hub pull rate limit workaround for docker
+    - >
+        if [ "$CONTAINER" = "docker" ]; then
+            conf="/etc/docker/daemon.json"
+            tmp=$(mktemp)
+            sudo jq '."registry-mirrors" += ["https://mirror.gcr.io"]' $conf > $tmp
+            sudo mv $tmp $conf
+            sudo systemctl daemon-reload
+            sudo systemctl restart docker
+        fi
     - $CONTAINER info
 
     - DIR="/usr/src/ima-evm-utils"
