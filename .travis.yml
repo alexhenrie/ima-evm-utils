@@ -32,6 +32,10 @@ before_install:
             # runc
             sudo curl -L https://github.com/opencontainers/runc/releases/download/v1.0.0-rc93/runc.amd64 -o /usr/bin/runc
             sudo chmod +x /usr/bin/runc
+
+            echo "=== START /etc/containers/registries.conf ==="
+            cat /etc/containers/registries.conf
+            echo "=== END /etc/containers/registries.conf ==="
         fi
     - $CONTAINER info
 
