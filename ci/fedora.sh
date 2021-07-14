@@ -38,7 +38,9 @@ yum -y install \
 	sudo \
 	vim-common \
 	wget \
-	which
+	which \
+	perl \
+	perl-IPC-Cmd
 
 yum -y install docbook5-style-xsl || true
 yum -y install swtpm || true
